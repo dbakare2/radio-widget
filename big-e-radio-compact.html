@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIG E RADIO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .radio-container {
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .radio-body {
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 0;
+            position: relative;
+        }
+        
+        .display-section {
+            background: #ffd931;
+            border-bottom: 2px solid #000000;
+            padding: 20px 20px;
+        }
+        
+        .frequency-display {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 56px;
+            font-weight: 400;
+            color: #231f20;
+            text-align: center;
+            line-height: 0.9;
+            letter-spacing: normal;
+            margin-bottom: 8px;
+        }
+        
+        .station-name {
+            font-family: 'Helvetica', Arial, sans-serif;
+            font-size: 11px;
+            font-weight: 400;
+            color: #231f20;
+            text-align: center;
+            line-height: 1.15;
+            letter-spacing: 0.077em;
+            text-transform: uppercase;
+            min-height: 13px;
+        }
+        
+        .frequency-bar {
+            margin-top: 15px;
+            height: 6px;
+            background: rgba(35, 31, 32, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .frequency-progress {
+            position: absolute;
+            height: 100%;
+            background: #231f20;
+            transition: width 0.4s ease;
+        }
+        
+        .controls-section {
+            padding: 20px;
+        }
+        
+        .tuning-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .arrow-btn {
+            background: #ffd931;
+            border: 2px solid #000000;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            font-family: 'Helvetica', Arial, sans-serif;
+            font-size: 32px;
+            font-weight: 300;
+            color: #231f20;
+            padding: 0;
+        }
+        
+        .arrow-btn:hover {
+            background: #231f20;
+            color: #ffd931;
+        }
+        
+        .arrow-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .station-counter {
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            padding: 10px 20px;
+        }
+        
+        .counter-label {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 10px;
+            font-weight: 400;
+            color: #231f20;
+            text-align: center;
+            letter-spacing: 0.073em;
+            line-height: 1.15;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+        }
+        
+        .counter-display {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 23px;
+            font-weight: 400;
+            color: #000000;
+            text-align: center;
+            line-height: 0.9;
+        }
+        
+        .playback-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+        }
+        
+        .play-btn {
+            background: #231f20;
+            border: 2px solid #000000;
+            width: 60px;
+            height: 60px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            padding: 0;
+        }
+        
+        .play-btn:hover {
+            background: #ffd931;
+        }
+        
+        .play-btn:hover svg {
+            fill: #231f20;
+        }
+        
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .play-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #ffd931;
+            transition: fill 0.15s ease;
+        }
+        
+        .volume-section {
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 25px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .volume-label {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 10px;
+            font-weight: 400;
+            color: #231f20;
+            letter-spacing: 0.073em;
+            text-transform: uppercase;
+            line-height: 1.15;
+        }
+        
+        .volume-slider {
+            width: 100px;
+            height: 5px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #c8cbcd;
+            outline: none;
+            border: 1px solid #000000;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ffd931;
+            border: 2px solid #000000;
+            cursor: pointer;
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #ffd931;
+            border: 2px solid #000000;
+            cursor: pointer;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: #a6a8aa;
+            color: #000000;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 9px;
+            font-weight: 400;
+            letter-spacing: 0.073em;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border-radius: 10px;
+            border: 2px solid #000000;
+            line-height: 1.15;
+        }
+        
+        .tuning .frequency-display {
+            animation: pop 0.2s ease;
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            .frequency-display {
+                font-size: 48px;
+            }
+            
+            .station-name {
+                font-size: 10px;
+            }
+            
+            .arrow-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 28px;
+            }
+            
+            .counter-display {
+                font-size: 20px;
+            }
+            
+            .play-btn {
+                width: 55px;
+                height: 55px;
+            }
+            
+            .volume-slider {
+                width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="radio-container">
+        <div class="radio-body">
+            <div class="status-badge" id="statusBadge">READY</div>
+            
+            <div class="display-section">
+                <div class="frequency-display" id="frequencyDisplay">88.5</div>
+                <div class="station-name" id="stationName">Press arrows to tune</div>
+                <div class="frequency-bar">
+                    <div class="frequency-progress" id="frequencyProgress" style="width: 25%"></div>
+                </div>
+            </div>
+            
+            <div class="controls-section">
+                <div class="tuning-controls">
+                    <button class="arrow-btn" id="prevBtn" aria-label="Previous station">‹</button>
+                    
+                    <div class="station-counter">
+                        <div class="counter-label">Station</div>
+                        <div class="counter-display" id="stationCounter">1 / 4</div>
+                    </div>
+                    
+                    <button class="arrow-btn" id="nextBtn" aria-label="Next station">›</button>
+                </div>
+                
+                <div class="playback-section">
+                    <button class="play-btn" id="playPauseBtn" aria-label="Play/Pause">
+                        <svg id="playIcon" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        <svg id="pauseIcon" viewBox="0 0 24 24" style="display: none;">
+                            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                        </svg>
+                    </button>
+                    
+                    <div class="volume-section">
+                        <div class="volume-label">Volume</div>
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70" aria-label="Volume">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ============================================
+        // CONFIGURATION - EDIT YOUR STATIONS HERE
+        // ============================================
+        
+        const stations = [
+            {
+                frequency: '88.5',
+                name: 'Station 1',
+                url: 'boroughs.mp3'
+            },
+            {
+                frequency: '91.2',
+                name: 'Station 2',
+                url: 'chatshow-intro.mp3'
+            },
+            {
+                frequency: '95.8',
+                name: 'Station 3',
+                url: 'trailer-broadcast-big-e-radio.mp3'
+            },
+            {
+                frequency: '99.4',
+                name: 'Station 4',
+                url: 'vintage-radio-skit.mp3'
+            }
+        ];
+        
+        // ============================================
+        // RADIO LOGIC
+        // ============================================
+        
+        let currentStation = 0;
+        let audio = new Audio();
+        let isPlaying = false;
+        
+        const frequencyDisplay = document.getElementById('frequencyDisplay');
+        const stationName = document.getElementById('stationName');
+        const frequencyProgress = document.getElementById('frequencyProgress');
+        const stationCounter = document.getElementById('stationCounter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const radioBody = document.querySelector('.radio-body');
+        const statusBadge = document.getElementById('statusBadge');
+        
+        // Initialize
+        updateStation(currentStation);
+        audio.volume = volumeSlider.value / 100;
+        
+        // Navigation buttons
+        prevBtn.addEventListener('click', () => {
+            const newStation = currentStation - 1 < 0 ? stations.length - 1 : currentStation - 1;
+            changeStation(newStation);
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            const newStation = (currentStation + 1) % stations.length;
+            changeStation(newStation);
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevBtn.click();
+            } else if (e.key === 'ArrowRight') {
+                nextBtn.click();
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                playPauseBtn.click();
+            }
+        });
+        
+        function changeStation(index) {
+            if (index === currentStation) return;
+            
+            // Add tuning effect
+            radioBody.classList.add('tuning');
+            statusBadge.textContent = 'TUNING';
+            setTimeout(() => {
+                radioBody.classList.remove('tuning');
+                statusBadge.textContent = isPlaying ? 'PLAYING' : 'READY';
+            }, 200);
+            
+            const wasPlaying = isPlaying;
+            if (isPlaying) {
+                audio.pause();
+            }
+            
+            currentStation = index;
+            updateStation(index);
+            
+            if (wasPlaying) {
+                audio.play().catch(e => console.log('Playback failed:', e));
+            }
+        }
+        
+        function updateStation(index) {
+            const station = stations[index];
+            frequencyDisplay.textContent = station.frequency;
+            stationName.textContent = station.name;
+            stationCounter.textContent = `${index + 1} / ${stations.length}`;
+            audio.src = station.url;
+            
+            // Update progress bar
+            const progress = ((index + 1) / stations.length) * 100;
+            frequencyProgress.style.width = `${progress}%`;
+        }
+        
+        // Playback controls
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                statusBadge.textContent = 'PAUSED';
+            } else {
+                audio.play().catch(e => {
+                    console.log('Playback failed:', e);
+                    statusBadge.textContent = 'ERROR';
+                    alert('Could not play audio. Make sure your MP3 URLs are correct and accessible.');
+                });
+                isPlaying = true;
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                statusBadge.textContent = 'PLAYING';
+            }
+        });
+        
+        audio.addEventListener('ended', () => {
+            isPlaying = false;
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            statusBadge.textContent = 'ENDED';
+        });
+        
+        // Volume control
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value / 100;
+        });
+    </script>
+</body>
+</html>
